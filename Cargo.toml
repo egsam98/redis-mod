@@ -1,0 +1,15 @@
+[package]
+name = "redis-mod"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+opt-level = 'z'
+strip = true
+lto = true
+
+[dependencies]
+redis-module = "2.0.7"

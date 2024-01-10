@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  redis:
+    image: "redis:7.2.3"
+    ports:
+      - 6379:6379
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ./target/release/libredis_mod.so:/usr/lib/libredis_mod.so
