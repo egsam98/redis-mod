@@ -39,12 +39,12 @@ fn get_alias(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 }
 
 redis_module! {
-    name: "mod_rs",
+    name: "mod_rs2",
     version: 1,
     allocator: (redis_module::alloc::RedisAlloc, redis_module::alloc::RedisAlloc),
     data_types: [],
     commands: [
-        ["mod_rs.set_alias", set_alias, "write", 0, 0, 0],
-        ["mod_rs.get_alias", get_alias, "readonly", 0, 0, 0],
+        ["mod_rs2.set_alias", set_alias, "write", 0, 0, 0],
+        ["mod_rs2.get_alias", get_alias, "readonly", 0, 0, 0],
     ],
 }
