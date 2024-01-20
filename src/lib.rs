@@ -12,10 +12,10 @@ fn set_alias(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
         &args[args.len()-1],
     );
 
-    ctx.open_key_writable(&key).write(value.try_as_str()?)?;
-    let key_str = key.try_as_str()?;
+    ctx.open_key_writable(&key).as_string_dma()?.write(value.as_slice())?;
+    let key_raw = key.as_slice();
     for alias in aliases {
-        ctx.open_key_writable(alias).write(key_str)?;
+        ctx.open_key_writable(alias).as_string_dma()?.write(key_raw)?;
     }
 
     Ok(true.into())
@@ -28,13 +28,12 @@ fn get_alias(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     }
 
     let alias = ctx.open_key(&args[1]);
-    let Some(key) = alias.read()? else {
+    let Some(key_raw) = alias.read()? else {
         return Ok(RedisValue::Null)
     };
 
-    let value = ctx.open_key(&ctx.create_string(key))
-        .read()?
-        .map(|b| b.to_vec());
+    let key = ctx.open_key(&ctx.create_string(key_raw));
+    let value = key.read()?.map(|b| std::str::from_utf8(b)).transpose()?;
     Ok(value.into())
 }
 
